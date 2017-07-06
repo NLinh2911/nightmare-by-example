@@ -1,0 +1,17 @@
+{
+  "name": "nightmare-by-example",
+  "version": "1.0.0",
+  "description": "demo how to use nightmare for UI testing and crawling",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "nightmarejs",
+    "javascript",
+    "testing",
+    "crawling"
+  ],
+  "author": "Linh Ngo",
+  "license": "ISC"
+}
