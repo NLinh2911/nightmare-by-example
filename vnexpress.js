@@ -18,7 +18,7 @@ nightmare
     let titles = [];
     // chạy qua mảng này và lấy tiêu đề
     news.forEach((article) => {
-      titles.push(article.innerText);
+      titles.push(article.innerText.trim());
     })
     return titles;
   })

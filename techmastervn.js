@@ -1,4 +1,4 @@
-// Demo lấy 5 bài viết trên Techmastervn Blog và lưu vào 1 file json
+// Demo lấy bài viết trên Techmastervn Blog và lưu vào 1 file json
 /*
  */
 const fs = require('fs');
