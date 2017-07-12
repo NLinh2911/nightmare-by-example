@@ -19,16 +19,16 @@ $ npm install --save nightmare
 $ node vnexpress.js
 ```
 ## THỰC HÀNH NIGHTMARE QUA TỪNG VÍ DỤ:
-1. [Lấy Tiêu Đề Báo Trên Vnexpress](#VÍ-DỤ-LẤY-TIÊU-ĐỀ-CÁC-BÀI-BÁO-TRÊN-TRANG-CHỦ-VNEXPRESS)
-2. [Lấy Tiêu Đề Báo Trên Kenh14 Với scrollTo](#VÍ-DỤ-scrollTo-TRÊN-KENH14)
-3. [Tự Động Đăng Nhập Và Tương Tác Trên Facebook](#VÍ-DỤ-TỰ-ĐỘNG-ĐĂNG-NHẬP-VÀO-FACEBOOK)
-4. [Xóa Cookies Trên Youtube](#VÍ-DỤ-LẤY-COOKIES-TRÊN-YOUTUBE)
-5. [Tìm Kiếm Ảnh Trên Google Và Tự Động Tải Về Máy](#TỰ-ĐỘNG-DOWNLOAD-ẢNH-TÌM-KIẾM-TRÊN-GOOGLE-VỀ-MÁY)
-6. [CÀO DỮ LIỆU SẢN PHẨM TRÊN 1 TRANG BÁN HÀNG](#CÀO-DỮ-LIỆU-SẢN-PHẨM-TRÊN-1-TRANG-BÁN-HÀNG)
+1. [Lấy Tiêu Đề Báo Trên Vnexpress](#ví-dụ-lấy-tiêu-đề-các-bài-báo-trên-trang-chủ-vnexpress)
+2. [Lấy Tiêu Đề Báo Trên Kenh14 Với scrollTo](#ví-dụ-scrollto-trên-kenh14)
+3. [Tự Động Đăng Nhập Và Tương Tác Trên Facebook](#ví-dụ-tự-động-đăng-nhập-vào-facebook)
+4. [Xóa Cookies Trên Youtube](#ví-dụ-lấy-cookies-trên-youtube)
+5. [Tìm Kiếm Ảnh Trên Google Và Tự Động Tải Về Máy](#tự-động-download-ảnh-tìm-kiếm-trên-google-về-máy)
+6. [CÀO DỮ LIỆU SẢN PHẨM TRÊN 1 TRANG BÁN HÀNG](#cào-dữ-liệu-sản-phẩm-trên-1-trang-bán-hàng)
 7. Tải nhạc
 8. Lưu vào MongoDB
 9. Lưu vào Postgresql dùng pg-promise
-10. [UI Testing - Kiểm Thử Giao Diện Trang Web](#UI-TESTING-VỚI-NIGHTMAREJS)
+10. [UI Testing - Kiểm Thử Giao Diện Trang Web](#ui-testing-với-nightmarejs)
 
 ## VÍ DỤ LẤY TIÊU ĐỀ CÁC BÀI BÁO TRÊN TRANG CHỦ VNEXPRESS
 #### RUN:
