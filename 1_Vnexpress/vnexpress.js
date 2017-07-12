@@ -8,7 +8,7 @@
 // Gọi module Nightmare để sử dụng
 const Nightmare = require('nightmare');
 // khởi tạo nightmare
-const nightmare = Nightmare();
+const nightmare = Nightmare({show: true});
 // truy cập vào vnexpress.net
 nightmare
   .goto('http://vnexpress.net/')

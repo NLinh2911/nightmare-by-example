@@ -19,14 +19,16 @@ nightmare
 /*
  * Lấy tất cả cookies của tất cả các url có trong phần cookies khi mở youtube.com (có 2 urls: youtube.com và 1 đg dẫn quảng cáo)
  */
-// nightmare
-//   .goto('https://www.youtube.com/')
-//   .wait(10000)
-//   .cookies.get({url: null}) // lấy tất cả cookies trong của tất cả url
-//   .end()
-//   .then(function (result) {
-//     console.log(result);
-//   })
-//   .catch(function (error) {
-//     console.error('Search failed:', error);
-//   });
+/*
+nightmare
+  .goto('https://www.youtube.com/')
+  .wait(10000)
+  .cookies.get({url: null}) // lấy tất cả cookies trong của tất cả url
+  .end()
+  .then(function (result) {
+    console.log(result);
+  })
+  .catch(function (error) {
+    console.error('Search failed:', error);
+  });
+*/

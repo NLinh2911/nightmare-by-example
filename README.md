@@ -1,4 +1,5 @@
 # Nightmarejs
+
 * Nightmare là một thư viện tự động hóa chạy browser. Nightmare sử dụng electron để truy cập web, mỗi lần truy xuất vào 1 url và lấy dữ liệu trên trang này, sẽ dùng mở bằng electron, hoàn thành tác vụ thì ngắt và đóng electron  
 * Nightmare bắt chước các tương tác của người dùng trên 1 trang web như:
   * Truy xuất: `goto`
@@ -17,14 +18,27 @@ $ npm install --save nightmare
 ```bash
 $ node vnexpress.js
 ```
+## THỰC HÀNH NIGHTMARE QUA TỪNG VÍ DỤ:
+1. [Lấy Tiêu Đề Báo Trên Vnexpress](#VÍ-DỤ-LẤY-TIÊU-ĐỀ-CÁC-BÀI-BÁO-TRÊN-TRANG-CHỦ-VNEXPRESS)
+2. [Lấy Tiêu Đề Báo Trên Kenh14 Với scrollTo](#VÍ-DỤ-scrollTo-TRÊN-KENH14)
+3. [Tự Động Đăng Nhập Và Tương Tác Trên Facebook](#VÍ-DỤ-TỰ-ĐỘNG-ĐĂNG-NHẬP-VÀO-FACEBOOK)
+4. [Xóa Cookies Trên Youtube](#VÍ-DỤ-LẤY-COOKIES-TRÊN-YOUTUBE)
+5. [Tìm Kiếm Ảnh Trên Google Và Tự Động Tải Về Máy](#TỰ-ĐỘNG-DOWNLOAD-ẢNH-TÌM-KIẾM-TRÊN-GOOGLE-VỀ-MÁY)
+6. [CÀO DỮ LIỆU SẢN PHẨM TRÊN 1 TRANG BÁN HÀNG](#CÀO-DỮ-LIỆU-SẢN-PHẨM-TRÊN-1-TRANG-BÁN-HÀNG)
+7. Tải nhạc
+8. Lưu vào MongoDB
+9. Lưu vào Postgresql dùng pg-promise
+10. [UI Testing - Kiểm Thử Giao Diện Trang Web](#UI-TESTING-VỚI-NIGHTMAREJS)
 
 ## VÍ DỤ LẤY TIÊU ĐỀ CÁC BÀI BÁO TRÊN TRANG CHỦ VNEXPRESS
-#### CÁC BƯỚC: 
-* Cài đặt nodejs
-* Cài đặt nightmarejs
+#### RUN:
+
 ```bash
-$ npm install nightmare
+$ cd 1_Vnexpress
+$ node vnexpress.js
 ```
+
+#### CÁC BƯỚC: 
 * Gọi module và khởi tạo nightmare
 ```js
 // Gọi module Nightmare để sử dụng
@@ -94,21 +108,117 @@ const nightmare = Nightmare();
   })
 ```
 
+## VÍ DỤ scrollTo TRÊN KENH14
+* Vào mục du lịch của trang kenh14.vn, scroll xuống để xem load hết các bài trong trang đó vì kenh14 có chức năng lazy loading (chỉ tải dữ liệu khi cần thiết, khi kéo xuống đến đó, không load tất cả dữ liệu ngay lần đầu render trang)
+
+```bash
+$ node kenh14.js
+```
+
 ## VÍ DỤ TỰ ĐỘNG ĐĂNG NHẬP VÀO FACEBOOK
+#### CHẠY:
+
+```bash
+$ cd 2_Kenh14-Scroll/
+$ node fb.js // đăng nhập fb sử dụng type() và click()
+$ node fb2.js // sử dụng insert() và type()
+```
+
+#### ĐĂNG NHẬP
 * `type(selector, text)` sẽ tự động điền chuỗi `text` vào `selector`. Nếu `text` trống thì sẽ xóa giá trị trong `selector`
 * Có thể gọi sự kiện keypress với `type` sử dụng unicode thay cho keypress, ví dụ, muốn thực hiện sự kiện nhấn phím 'enter' `.type('body', '\u000d')` (ở đây, selector chính là thẻ <body>, '\u000d' sẽ thay cho nút 'enter')
 
 * `insert(selector, text)` tương tự như `type` nhưng không có chức nặng gọi sự kiện liên quan đến keyboard => nếu chỉ điền chữ thì dùng `insert` sẽ nhanh hơn 
 
-```bash
-$ node fb.js // đăng nhập fb sử dụng type() và click()
+#### VÀO 1 GROUP VÀ ĐẾM SỐ BÀI VIẾT THEO NGƯỜI ĐĂNG
 
-$ node fb2.js // sử dụng insert() và type()
+```bash
+$ cd 2_Kenh14-Scroll/
+$ node fb3.js 
 ```
 
-## VÍ DỤ scrollTo TRÊN KENH14.VN 
+## VÍ DỤ LẤY COOKIES TRÊN YOUTUBE
+#### CHẠY:
+```bash
+$ cd 4_Youtube-Cookies/
+$ node youtube.js
+```
 
-## VÍ DỤ LẤY, XÓA COOKIES TRÊN YOUTUBE
+* `cookies.get({})` lấy tất cả cookies tại url hiện tại. Ví dụ ta vào trang youtube.com thì `cookies.get()` sẽ tìm và lấy cookies của url 'https://www.youtube.com/' 
+* `cookies.get({url: null})` lấy tất cả cookies của tất cả các url có trong phần cookies. Ví dụ trang youtube.com trong phần cookies thực ra có 2 urls: 'https://www.youtube.com/' và 1 đg dẫn quảng cáo
+
+## TỰ ĐỘNG DOWNLOAD ẢNH TÌM KIẾM TRÊN GOOGLE VỀ MÁY 
+#### CHẠY:
+```bash
+$ cd 5_Google-Images/
+$ node google-img-full.js
+```
+#### CÁC BƯỚC :
+  1. Truy xuất vào google
+  2. Đánh tìm kiếm: 'Ảnh top 10 bãi biển đẹp nhất Việt Nam'
+  3. Nhấn vào đường dẫn 'Hình ảnh khác...' để chuyển sang phần tìm kiếm ảnh `g-more-link a`
+  4. Click vào từng ảnh và lấy đường dẫn của các ảnh
+  5. Lưu những đường dẫn này vào 1 mảng rồi khởi tạo nightmare lần lượt vào từng đường dẫn ảnh và tải về
+  6. Sử dụng modules `fs`, `shelljs` và `image-downloader` để tải và lưu ảnh vào máy 
+
+* Link documentations:
+  * [fs](https://nodejs.org/api/fs.html)
+  * [shelljs](https://github.com/shelljs/shelljs)
+  * [image-downloader](https://github.com/demsking/image-downloader)
+* Cần cài đặt từ npm, fs là native modules của nodejs nên không cần cài đặt từ npm
+
+```bash
+$ npm install --save image-downloader
+$ npm install --save shelljs
+```
+
+#### Nightmare lấy các đường dẫn ảnh:
+
+#### Download ảnh xuống máy: có 2 dạng là ảnh có đường dẫn url tuyệt đối `https://...` và ảnh đc encoded base64 `data:image...`
+* Với ảnh có url hoàn chỉnh, ta có thể sử dụng module `image-downloader` để tải và lưu về máy
+```js
+// dưới đây sẽ là đoạn code để tải ảnh có đg dẫn url hoàn chỉnh
+        let options = {
+          url: img, // img chính là url hoàn chỉnh
+          dest: destPath + '/' + index + '.jpg'
+        }
+        // gọi module image-downloader để tải về máy
+        imageDownloader
+          .image(options)
+          .then(({filename, image}) => {
+            console.log('File saved ok', filename)
+          })
+          .catch((err) => {
+            throw err
+          });
+```
+
+* Tuy nhiên nếu ảnh đc encoded base64, đường dẫn của ảnh sẽ theo dạng 'data:image/jpeg;base64/9j/4AAQSk....', với ảnh kiểu này module image-downloader không tải được ảnh. 
+
+```js
+// đoạn code để lưu ảnh encoded base64 vào máy
+        // tìm và thay các phần k cần thiết với ''
+        let data = img.replace(/^data:image\/\w+;base64,/, '')
+        // dùng hàm fs.writeFile() tham số đầu tiên là vị trí lưu file, data là dữ liệu của ảnh ecoded base64 
+        fs.writeFile(`${destPath}/_${index}.jpg`, data, {
+          encoding: 'base64'
+        }, (error) => {
+          if (error) 
+            throw error;
+          console.log('File saved ok');
+        })
+```
+
+## CÀO DỮ LIỆU SẢN PHẨM TRÊN 1 TRANG BÁN HÀNG
+#### CHẠY:
+```bash
+$ cd 6_Crawl-Product-To-Json/
+$ node crawl-product-to-json.js
+```
+#### CÁC BƯỚC:
+1. Vào phần sản phẩm
+2. Lấy url của tất cả sản phẩm trong 1 trang (không chuyển trang)
+3. Chạy qua từng url với nightmare và lấy thông tin sản phẩm
 
 ## UI TESTING VỚI NIGHTMAREJS
 * Sử dụng Nightmare để kiểm thử UI - UI Testing. Nightmare mô phỏng lại các hành vi của người dùng như vào 1 trang web, điền ô đăng nhập hay tìm kiếm, click vào các nút hay đường links
@@ -126,7 +236,7 @@ cd test // mở terminal trong folder test
 mocha test1.js // chạy test1.js
 ```
 
-### Ví dụ 1: kiểm thử 1 trang web đang đc phát triển, sẽ chạy trên localhost
+### Ví dụ 1: kiểm thử tốc độ tải trang vnexpress.net
 
 * Tạo test/test.js
 
@@ -139,7 +249,6 @@ npm install --save-dev nightmare
 
 * Viết các file test trong folder test/
 
-#### Kiểm tra tốc độ tải 1 trang web
 ```bash
 cd test
 touch test1.js
@@ -151,6 +260,7 @@ touch test1.js
 const Nightmare = require('nightmare')
 const assert = require('assert') // 1 assertion library có sẵn trong Nodejs
 ```
+
 * Khai báo 1 bộ test
 
 ```js
@@ -183,7 +293,7 @@ describe('Tải trang web',  function () {
   let nightmare = null;
   // vì mỗi bộ test con bên trong lại cần sử dụng 1 tiến trình nightmare riêng
   // beforeEach() chính là 1 hook trong Mocha -> đc gọi trc khi chạy mỗi bộ test con
-  beforeEach(function () {
+  beforeEach('khởi tạo nightmare', function () {
     nightmare = new Nightmare({show: true}) // khởi tạo 1 nightmare riêng cho từng bộ test con
   })
 })
@@ -209,11 +319,11 @@ describe('Tải trang web',  function () {
 
 * Kết quả chạy `test1.js`
 
-![img](test/test1.png "Kết quả test1")
+![img](UI-Testing/img/test1.png "Kết quả test1")
 
 * Nếu ta thay 'vnexpress.net' bằng 1 trang web bị chặn như 'bbc.com', thì trang sẽ k load đc và quá 10s sẽ báo lỗi: 'Error: Timeout of 10000ms exceeded.' quá thời gian 10s -> timeout dừng test
 
-![img](test/test1-2.png "Kết quả test1 fail")
+![img](UI-Testing/img/test1-2.png "Kết quả test1 fail")
 
 * Tương tự với test tải trang chủ, ta có thể test tải các đg dẫn khác trong 1 trang web, ví dụ, trang sản phẩm, trang tin tức, trang đăng nhập,... Ví dụ với test vnexpress ở trên, thêm 1 test kiểm tra trang giải trí
 
@@ -233,4 +343,300 @@ describe('Tải trang web',  function () {
 
 * Kết quả chạy `mocha test1.js` lúc này với 2 test nhỏ trong bộ test 'Tải trang web'
 
-![img](test1-3.png)
+![img](UI-Testing/img/test1-3.png "Kết quả test1 thành công (passing)")
+
+### Ví dụ 2: Kiểm thử 1 trang web đang phát triển, chạy trên localhost
+* Các mục kiểm tra:
+  * Tải trang ok
+  * Scroll trang hiển thị giao diện ok
+  * Đăng nhập, đăng kí ok
+  * Xem sản phẩm + giỏ hàng ok
+  * Quá trình thanh toán ok
+
+* Kiểm thử 1 trang web bán hàng thử nghiệm chạy trên `http://localhost:3002/` 
+
+```bash
+mocha test-web-localhost.js
+```
+
+#### Test tải trang chủ và trang sản phẩm
+
+```js 
+// tạo bộ test UI
+const Nightmare = require('nightmare')
+const assert = require('assert')
+
+describe('UI Flow Tests', function () {
+  // bên trong này sẽ có nhiều test con kiểm tra tải trang, đăng kí, mua sản phẩm,...
+
+  // khai báo và khởi tạo nightmare trước khi chạy mỗi test
+  let nightmare = null
+  beforeEach('khởi tạo nightmare', function () {
+    nightmare = new Nightmare({show: true})
+  })
+  
+```
+
+* Bộ test con 'Test trang công khai' có 2 test con tải trang chủ và trang sản phẩm
+
+```js
+  describe('Test trang công khai', function () {
+    describe('/ (Trang chủ)', function () {
+      // set thời gian tải trang chủ không quá 5s
+      this.timeout('s')
+
+      it('Trang chủ ok', function (done) {
+        nightmare
+          .goto('http://localhost:3002/')
+          .end()
+          .then(function (result) {
+            done()
+          })
+          .catch(done)
+      })
+    })
+
+    describe('Trang sản phẩm', function () {
+      this.timeout('s')
+      it('Trang sản phẩm ok', function (done) {
+        nightmare
+          .goto('http://localhost:3002/dien-thoai')
+          .scrollTo(500, 0)
+          .wait(2000)
+          .end()
+          .then(result => {
+            done()
+          })
+          .catch(done)
+      })
+    })
+  })
+```
+
+* Chạy test `mocha test-web-localhost.js` trả về kết quả: thời gian tải cả 2 trang dưới 5s
+
+![img](UI-Testing/img/test-web-localhost-1.png "UI test tải trang thành công")
+
+#### Bộ test con 'Đăng kí tài khoản': 
+
+* Bên trong bộ test con này, ta có thể viết các test con kiểm tra. **Khi test ta nên kiểm tra cả trường hợp thành công (test passed) lẫn thất bại (test failed)**. Ví dụ:
+  * Đăng kí tài khoản với thông tin sai: 
+    1. Tài khoản trùng, đã tồn tại trong cơ sở dữ liệu rồi
+    2. Thông tin đăng kí đầu vào không hợp lệ: password không khớp
+  * Đăng kí tài khoản với thông tin hợp lệ
+
+* Ô đăng kí tài khoản của trang Thanhquanmobile như dưới đây
+
+![img](UI-Testing/img/test-web-localhost-2.png "sign up form của trang thanhquanmobile trên localhost")
+
+#### *Trường hợp 1: đăng kí với thông tin trùng với tài khoản đã tồn tại*
+* Trong cơ sở dữ liệu của trang web, đã có 1 tài khoản tồn tại với email là **fake3@gmail.com** nên nếu đăng kí email này sẽ báo lỗi -> server sẽ chuyển ta về trang chủ với 1 thông báo lỗi như thế này
+
+![img](UI-Testing/img/test-web-localhost-3.png "thanhquanmobile báo lỗi khi đăng kí tài khoản trùng")
+
+* Khi test đăng kí tài khoản, lúc đầu lần lượt thêm thông tin vào các ô input đăng kí tài khoàn như dưới đây thì gặp lỗi: ô email và ô password đầu tiên không điền dữ liệu vào đc
+```js
+ describe('Đăng kí tài khoản', function () {
+    describe('Đăng kí với thông tin sai', function () {
+      it('Đăng kí thất bại - tài khoản trùng', function (done) {
+        nightmare
+          .goto('http://localhost:3002/')
+          .wait(3000)
+          .click('#login')
+          .click("span[data-target='#registerModal']")
+          .wait(3000)
+          .insert("input[name='fullname']", 'Test Name 1')
+          .wait(3000)
+          .type("input[name='email']", 'fake3@gmail.com')  
+          .wait(3000)
+          .insert("input[name='phone']", '0912345678')
+          .wait(3000)
+          .insert("input[name='password2']", 'fakepassword3')
+          .wait(3000)
+          .type("input[name='password']", 'fakepassword3')
+          .wait(3000)
+          .select("select[name='gender']", 'Nữ') // cho phép chọn giá trị của dropdown element
+          .wait(1000)
+          .insert("textarea[name='address']", 'fake address')
+          .wait(1000)
+          .check("input[name='agreement']") // chọn checkbox
+          .wait(1000)
+          .click('#signup-submit')
+          .wait(5000)
+          // sau khi đăng kí -> đăng kí thất bại sẽ trở về trang chủ vs alert báo lỗi
+          // lấy alert báo lỗi để so sánh xem là lỗi gì
+          .evaluate(function () {
+            // .......
+          })
+      })
+    })
+```
+
+* Sửa: 2 ô bị lỗi phải đc click vào trc (phần tử html đấy phải đc 'focus') thì mới điền dữ liệu đc nên sau khi điền các ô kia rồi, click submit form -> vì thiếu thông tin ô email -> ô html đc focus -> type() dữ liệu vào đây
+* Sau đó tiếp tục submit form -> vì thiếu thông tin ô password nên -> ô html của password đc focus -> type() dữ liệu vào đây
+* Bây giờ tất cả các ô input đã đc điền đầy đủ -> click submit form và chờ server xử lý request
+
+```js
+  describe('Đăng kí tài khoản', function () {
+    describe('Đăng kí với thông tin sai', function () {
+      it('Đăng kí thất bại - tài khoản trùng', function (done) {
+        nightmare
+          .goto('http://localhost:3002/')
+          .wait(3000)
+          .click('#login')
+          .click("span[data-target='#registerModal']")
+          .wait(3000)
+          .insert("input[name='fullname']", 'Test Name 1')
+          .wait(3000)
+          .insert("input[name='phone']", '0912345678')
+          .wait(3000)
+          .insert("input[name='password2']", 'fakepassword3')
+          .wait(3000)
+          .select("select[name='gender']", 'Nữ')
+          .wait(1000)
+          .insert("textarea[name='address']", 'fake address')
+          .wait(1000)
+          .check("input[name='agreement']")
+          .wait(1000)
+          .click('#signup-submit')
+          .wait(5000)
+          .type("input[name='email']", 'fake3@gmail.com')
+          .wait(3000)
+          .click('#signup-submit')
+          .type("input[name='password']", 'fakepassword3')
+          .wait(3000)
+          .click('#signup-submit')
+          .wait(5000)
+          // sau khi đăng kí -> đăng kí thất bại sẽ trở về trang chủ vs alert báo lỗi
+          // lấy alert báo lỗi để so sánh xem là lỗi gì
+          .evaluate(function () {
+            let alert = document
+              .querySelector('.alert.alert-danger')
+              .innerText;
+            return alert;
+          })
+          .end()
+          .then(function (alert) {
+            console.log(alert);
+            // trang web báo lại alert tùy theo lỗi
+            if (alert === 'Account already exists. Please log in or register another account!') {
+              done()
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+      })
+      // Phần sau sẽ thêm test case trường hợp 2, password k khớp dưới đây
+      //.......
+    })
+  })
+```
+
+* Nên sau khi lấy đc chuỗi alert trong phần `evaluate()`, trong phần `then()` ta sẽ so sánh giá trị này với chuỗi thực tế mà trang web trả về. Nếu giống nhau -> gọi hàm callback `done()` để hoàn thành test
+
+#### *Trường hợp 2: form đăng kí có password không khớp*
+* Server sẽ xem xét form đăng kí, nếu password k khớp -> chuyển về trang chủ và hiển thị alert báo lỗi
+
+![img](UI-Testing/img/test-web-localhost-4.png "thanhquanmobile báo lỗi đăng kí khi mật khẩu không khớp ")
+
+* Sau test case của trường hợp 1 ở trên, viết test case cho trường hợp 2 tương tự 
+  * Notes: nhớ lỗi document.querySelector('.alert.alert-danger') vs ('.alert .alert-danger')
+
+```js
+// thêm vào sau test case trường hợp 1 ở trên
+      it('Đăng kí thất bại vs password k khớp', function (done) {
+        nightmare
+          .goto('http://localhost:3002/')
+          .wait(3000)
+          .click('#login')
+          .click("span[data-target='#registerModal']")
+          .wait(3000)
+          .insert("input[name='fullname']", 'Test Name 4')
+          .wait(3000)
+          .insert("input[name='phone']", '0912345678')
+          .wait(3000)
+          .insert("input[name='password2']", 'fakepassword4')
+          .wait(3000)
+          .select("select[name='gender']", 'Nữ')
+          .wait(1000)
+          .insert("textarea[name='address']", 'fake address')
+          .wait(1000)
+          .check("input[name='agreement']")
+          .wait(1000)
+          .click('#signup-submit')
+          .wait(5000)
+          .type("input[name='email']", 'fake4@gmail.com')
+          .wait(3000)
+          .click('#signup-submit')
+          .type("input[name='password']", 'fakepassword3')
+          .wait(3000)
+          .click('#signup-submit')
+          .wait(5000)
+          .evaluate(function () {
+            let alert = document.querySelector('.alert.alert-danger')
+              .innerText;
+            return alert;
+          })
+          .end()
+          .then(function (alert) {
+            console.log(alert); 
+            // trang web báo lại alert tùy theo lỗi
+            if (alert === 'Passwords do not match') {
+              done()
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+      })
+```
+
+* Tương tự trường hợp 1, ta cũng lấy chuỗi alert và so sánh rồi gọi callback `done()` để kết thúc test case
+* Nếu chạy cả 2 test case trên, kết quả trên terminal sẽ như sau.
+
+![img](UI-Testing/img/test-web-localhost-5.png "kết quả chạy bộ test 'Đăng kí tài khoản'")
+
+#### Test chức năng click mua hàng -> Số lượng sản phẩm trên icon giỏ hàng đc cập nhật
+
+* Test 'Mua sản phẩm'. Ở trang sản phẩm, nếu hover vào 1 ô sản phẩm sẽ có nút mua hàng. Nút mua hàng của mỗi sản phẩm có thuộc tính htmt `id="buy_productId"` -> click vào đây sẽ thêm sản phẩm có `productId` như trong thuộc tính id vào giỏ hàng -> icon màu đỏ hiển thị số sản phẩm trong giỏ hàng sẽ đc cập nhật
+
+```js
+  describe('Mua sản phẩm', function () {
+    it('Click mua sản phẩm ok', function (done) {
+      nightmare.goto('http://localhost:3002/dien-thoai')
+        .wait(3000)
+        .click('#buy_rJBsc-wRe a') // click mua sản phẩm có id là 'rJBsc-wRe'
+        .wait(5000)
+        .evaluate(function () {
+          let productNumber = document.querySelector('.my-cart-badge') // số lượng sản phẩm hiển thị trên icon giỏ hàng
+            .innerText;
+          return productNumber;
+        })
+        .end()
+        .then(productNumber => {
+          console.log(productNumber);
+          if (productNumber == '1') { // thêm 1 sản phẩm nên số lượng phải bằng 1
+            done()
+          }
+        })
+        .catch(done)
+    })
+  })
+``` 
+
+* Nếu sản phẩm đc thêm vào giỏ hàng thành công -> số trên giỏ hàng icon tăng lên từ 0 thành 1 -> trong `evaluate()` lấy giá trị số lượng sản phẩm `productNumber` rồi so sánh -> nếu bằng 1 thì -> gọi `done()` kết thúc test
+
+![img](UI-Testing/img/test-web-localhost-6.png "kết quả bộ test 'Mua sản phẩm'")
+
+#### Chạy 1 lượt tất cả các test trong 'UI Flow Tests'
+* Comment lại các dòng console.log trong `then()`
+
+![img](UI-Testing/img/test-web-localhost-7.png "chạy UI Flow Tests")
+
+## Tạo Dữ Liệu Giả Bằng [Mockaroo](https://www.mockaroo.com)
+
+
+* Trang Mockaroo cho phép tạo dữ liệu giả, có thể thêm số cột hay trường, chọn kiểu dữ liệu, chọn số % dữ liệu trống với giá trị null
+* Có thể download dữ liệu về dạng csv, json, sql,...
+* Chúng ta sẽ thử tạo 100 bản dữ liệu với 

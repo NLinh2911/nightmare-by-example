@@ -1,7 +1,6 @@
 // Demo đăng nhập facebook
 /*
- * Chủ đề chính: type() để điền thông tin tự động
- * click() nhấn vào 1 selector
+ * Chủ đề chính: type() để điền thông tin tự động và nhấn phím enter
  */
 const Nightmare = require('nightmare');
 // khởi tạo nightmare
@@ -10,12 +9,12 @@ const nightmare = Nightmare({show: true});
 nightmare
   .goto('https://www.facebook.com/')
   .wait(1000)
-  .insert('#email', 'andorea_2911@yahoo.com')
-  .type('#pass', 'Taeny3981')
+  .insert('#email', 'fb email')
+  .type('#pass', 'fb pass')
   .type('#pass', '\u000d')
   .wait(4000)
   .evaluate(function () {
-    return 'login success';
+    return 'login successs';
   })
   .end()
   .then(function (result) {

@@ -13,7 +13,7 @@ describe('Tải trang web', function () {
   // để ta khởi tạo nightmare
   let nightmare = null;
   // vì mỗi bộ test con bên trong lại cần sử dụng 1 tiến trình nightmare
-  // beforeEach() chính là 1 hook trong Mocha -> đc gọi trc khi chạy mỗi bộ test
+  // beforeEach() chính là 1 hook trong Mocha -> đc gọi trc khi chạy mỗi test 
   // con
   beforeEach('khởi tạo nightmare', function () {
     nightmare = new Nightmare({show: true})
