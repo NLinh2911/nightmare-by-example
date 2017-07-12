@@ -25,10 +25,9 @@ $ node vnexpress.js
 4. [Xóa Cookies Trên Youtube](#ví-dụ-lấy-cookies-trên-youtube)
 5. [Tìm Kiếm Ảnh Trên Google Và Tự Động Tải Về Máy](#tự-động-download-ảnh-tìm-kiếm-trên-google-về-máy)
 6. [CÀO DỮ LIỆU SẢN PHẨM TRÊN 1 TRANG BÁN HÀNG](#cào-dữ-liệu-sản-phẩm-trên-1-trang-bán-hàng)
-7. Tải nhạc
-8. Lưu vào MongoDB
-9. Lưu vào Postgresql dùng pg-promise
-10. [UI Testing - Kiểm Thử Giao Diện Trang Web](#ui-testing-với-nightmarejs)
+7. Lưu vào MongoDB
+8. [Lưu vào Postgresql dùng pg-promise](#lưu-sản-phẩm-vào-csdl-postgresql)
+9. [UI Testing - Kiểm Thử Giao Diện Trang Web](#ui-testing-với-nightmarejs)
 
 ## VÍ DỤ LẤY TIÊU ĐỀ CÁC BÀI BÁO TRÊN TRANG CHỦ VNEXPRESS
 #### RUN:
@@ -209,17 +208,77 @@ $ npm install --save shelljs
         })
 ```
 
-## CÀO DỮ LIỆU SẢN PHẨM TRÊN 1 TRANG BÁN HÀNG
+## CÀO DỮ LIỆU SẢN PHẨM TRÊN 1 TRANG BÁN HÀNG 
 #### CHẠY:
 ```bash
-$ cd 6_Crawl-Product-To-Json/
-$ node crawl-product-to-json.js
+$ cd 6_Save-To-Json/
+$ node crawl-to-json.js
 ```
 #### CÁC BƯỚC:
-1. Vào phần sản phẩm
+1. Vào phần sản phẩm của 1 trang web
 2. Lấy url của tất cả sản phẩm trong 1 trang (không chuyển trang)
 3. Chạy qua từng url với nightmare và lấy thông tin sản phẩm
+4. Lưu mảng thông tin sản phẩm vào file json
 
+* Sử dụng thêm module `async` để quản lý và giới hạn chỉ chạy 2 tiến trình nightmare (mở 2 cửa sổ electron) 1 lúc
+```bash
+// cần cài async
+$ npm install --save async
+```
+
+## LƯU SẢN PHẨM VÀO CSDL POSTGRESQL
+#### CHẠY:
+```bash
+$ cd 7_Save-To-Postgresql/
+$ node crawl-to-postgres.js
+```
+#### CÁC BƯỚC:
+1. Phần cào dữ liệu sản phầm tương tự phần ở trên
+2. Nhưng thay vì save vào file json, sẽ kết nối và lưu trực tiếp vào CSDL Postgresql qua `pg-promise`
+
+#### CÀI VÀ KẾT NỐI POSTGRES
+```bash
+npm install --save pg-promise
+```
+* Tạo 1 file `pgp.js` để khởi tạo kết nối với CSDL Postgres trong máy
+```js
+// cấu hình kết nối với postgres
+const cn = {
+  host: 'localhost',
+  port: 5432,
+  database: 'test_product',
+  user: 'postgres',
+  password: 'abc'
+};
+
+const pgp = require('pg-promise')();
+
+module.exports.db = pgp(cn);
+```
+  * Trong database 'test_product' cần có 1 table để chứa các thông tin đc cào về
+  * Mở postgresql với pgAdmin hoặc psql hay pgcli để chạy SQL tạo bảng 
+  ```sql
+
+  ```
+* Trong file crawl chính `crawl-to-postgres.js`:
+```js
+// kết nối với CSDL
+const {db,config} = require('./pgp.js');
+const pgp = require('pg-promise');
+```
+* Thay hàm `exportJson()` ở phần trên, sử dụng trực tiếp lệnh insert vào CSDL
+```js
+// -----------Export to database directly---------
+db
+  .none('INSERT INTO product (product_name, manufacturer, price, main_property) VALUES( ${product_name}, ${manufacturer}, ${price}, ${main_property})', res)
+  .then(() => {
+    // thêm vào CSDL thành công;
+    console.log("insert success");
+  })
+  .catch(error => {
+    console.log(error.message);
+  });
+```
 ## UI TESTING VỚI NIGHTMAREJS
 * Sử dụng Nightmare để kiểm thử UI - UI Testing. Nightmare mô phỏng lại các hành vi của người dùng như vào 1 trang web, điền ô đăng nhập hay tìm kiếm, click vào các nút hay đường links
 * Dưới đây sẽ hướng dẫn sử dụng Nightmarejs và Mocha để đánh giá UI của 1 trang web
