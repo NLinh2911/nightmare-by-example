@@ -7,6 +7,7 @@ const async = require('async');
 // module shell giúp viết các câu lệnh của command line cho Node
 const shell = require('shelljs');
 const fs = require('fs');
+// sử dụng module này để tải file nhạc
 const request = require('request');
 // khởi tạo nightmare
 const nightmare = new Nightmare({
@@ -90,6 +91,7 @@ function crawl(arr, cb) {
               cb(null, {});
             }
             try {
+              // sử dụng module request để tải file nhạc 
               request
                 .get(result[0])
                 .on('error', function (err) {

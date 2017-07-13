@@ -24,9 +24,10 @@ $ node vnexpress.js
 3. [Tự Động Đăng Nhập Và Tương Tác Trên Facebook](#ví-dụ-tự-động-đăng-nhập-vào-facebook)
 4. [Xóa Cookies Trên Youtube](#ví-dụ-lấy-cookies-trên-youtube)
 5. [Tìm Kiếm Ảnh Trên Google Và Tự Động Tải Về Máy](#tự-động-download-ảnh-tìm-kiếm-trên-google-về-máy)
-6. [CÀO DỮ LIỆU SẢN PHẨM TRÊN 1 TRANG BÁN HÀNG](#cào-dữ-liệu-sản-phẩm-trên-1-trang-bán-hàng)
-7. Lưu vào MongoDB
-8. [Lưu vào Postgresql dùng pg-promise](#lưu-sản-phẩm-vào-csdl-postgresql)
+6. [Cào Dử Liệu Sản Phẩm Trên 1 Trang Bán Hàng](#cào-dữ-liệu-sản-phẩm-trên-1-trang-bán-hàng)
+7. [Lưu Vào Postgresql Dùng Pg-Promise](#lưu-sản-phẩm-vào-csdl-postgresql)
+8. Lưu Vào MongoDB
+9. [Tải Nhạc Tự Động Trên Chiasenhac](#)
 9. [UI Testing - Kiểm Thử Giao Diện Trang Web](#ui-testing-với-nightmarejs)
 
 ## VÍ DỤ LẤY TIÊU ĐỀ CÁC BÀI BÁO TRÊN TRANG CHỦ VNEXPRESS
@@ -279,6 +280,36 @@ db
     console.log(error.message);
   });
 ```
+## LƯU SẢN PHẨM VÀO CSDL MONGODB
+* To be updated..... 
+
+
+
+## TẢI NHẠC TỰ ĐỘNG TRÊN CHIASENHAC
+#### CHẠY:
+```bash
+$ cd 9_download-Music/
+$ node download-music.js
+```
+
+#### CÁC BƯỚC:
+* Tương tự với tải sản phẩm phần trên
+* Chạy 1 tiến trình để lấy hết các link vào từng bài hát
+* Sử dụng hàm `crawl()` chạy qua từng link bài hát, mỗi lần lại gọi hàm `crawlEachUrl()` tạo 1 tiến trình nightmare con để lấy đường dẫn tải nhạc và tải về máy
+* Để tải nhạc ta sẽ sử dụng module `request` để đọc nội dung trả về (response) khi gửi get request lên url tải nhạc và ghi nó thành file nhạc trong máy
+```js
+// sử dụng module request để tải file nhạc 
+request
+  .get('đường dẫn tải nhạc') // lấy dữ liệu stream trả về từ request lên 'đường dẫn tải nahcj'
+  .on('error', function (err) {
+  // handle error
+    if (err)
+      throw err;
+  })
+  .pipe(fs.createWriteStream('tên-bài-hát.mp3')); // sau đó ghi dữ liệu vào write stream 
+```
+
+
 ## UI TESTING VỚI NIGHTMAREJS
 * Sử dụng Nightmare để kiểm thử UI - UI Testing. Nightmare mô phỏng lại các hành vi của người dùng như vào 1 trang web, điền ô đăng nhập hay tìm kiếm, click vào các nút hay đường links
 * Dưới đây sẽ hướng dẫn sử dụng Nightmarejs và Mocha để đánh giá UI của 1 trang web
@@ -693,9 +724,11 @@ describe('UI Flow Tests', function () {
 
 ![img](UI-Testing/img/test-web-localhost-7.png "chạy UI Flow Tests")
 
-## Tạo Dữ Liệu Giả Bằng [Mockaroo](https://www.mockaroo.com)
+## TẠO DỮ LIỆU GIẢ BẰNG [Mockaroo](https://www.mockaroo.com)
 
 
 * Trang Mockaroo cho phép tạo dữ liệu giả, có thể thêm số cột hay trường, chọn kiểu dữ liệu, chọn số % dữ liệu trống với giá trị null
 * Có thể download dữ liệu về dạng csv, json, sql,...
 * Chúng ta sẽ thử tạo 100 bản dữ liệu với 
+
+* To be updated...
