@@ -1,7 +1,4 @@
 // DEMO DOWNLOAD ẢNH TRÊN GOOGLE
-/**
- * sử dụng 1 module là 'img'
- */
 
 // Gọi module Nightmare để sử dụng
 const Nightmare = require('nightmare');
