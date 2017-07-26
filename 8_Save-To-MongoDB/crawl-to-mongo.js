@@ -10,8 +10,8 @@ let nightmare = Nightmare({
 });
 
 //----- connect to db with pg-promise--------
-const db = require('./pgp.js');
-const pgp = require('pg-promise');
+const mongoose = require('mongoose');
+const Product = require('./mongoose.js');
 // Mảng có mỗi phần tử là 1 object chứa thông tin một sản phẩm
 let realdata = [];
 
@@ -39,6 +39,10 @@ nightmare
         console.log(err.message);
       }
       console.log('Hoàn thành chạy crawl()');
+      // Ngắt kết nối của mongoose với CSDL
+      mongoose.connection.close(function () { 
+        console.log('Mongoose connection ends !!');  
+      }); 
     });
   })
   .catch(function (err) {
@@ -105,18 +109,19 @@ function crawl(arr, cb) {
           cb(null, {});
         }
         try {
-          // update data every crawl time
+          // update data every crawl time 
           // -----------Export to database directly---------
-          db
-            .none('INSERT INTO product (product_name, manufacturer, price, main_property) VALUES( ${product_name}, ${manufacturer}, ${price}, ${main_property})', res)
-            .then(() => {
-              // thêm vào CSDL thành công;
-              console.log("insert success");
+          let newProduct = new Product(res)
+            .save()
+            .then(function (newProduct) {
+              console.log(newProduct);
+              console.log('Insert to Mongo success');
+              cb(null, res);
             })
             .catch(error => {
               console.log(error.message);
-            });
-          cb(null, res);
+            })
+
         } catch (err) {
           console.log(err.message);
           cb(null, {});

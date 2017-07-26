@@ -21,6 +21,7 @@
   "dependencies": {
     "async": "^2.5.0",
     "image-downloader": "^3.2.2",
+    "mongoose": "^4.11.4",
     "pg-promise": "^6.3.5",
     "shelljs": "^0.7.8"
   }

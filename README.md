@@ -11,13 +11,17 @@
 * Nightmare là module của Nodejs nên máy các bạn cần cài đặt Nodejs
 
 * Cài đặt Nightmarejs với npm
+
 ```bash
 $ npm install --save nightmare
 ```
+
 * Các file nightmare chúng ta sẽ viết là javascript nên ví dụ để chạy 1 file cào dữ liệu từ vnexpress, tên file là vnexpress.js
+
 ```bash
 $ node vnexpress.js
 ```
+
 ## THỰC HÀNH NIGHTMARE QUA TỪNG VÍ DỤ:
 1. [Lấy Tiêu Đề Báo Trên Vnexpress](#ví-dụ-lấy-tiêu-đề-các-bài-báo-trên-trang-chủ-vnexpress)
 2. [Lấy Tiêu Đề Báo Trên Kenh14 Với scrollTo](#ví-dụ-scrollto-trên-kenh14)
@@ -26,8 +30,8 @@ $ node vnexpress.js
 5. [Tìm Kiếm Ảnh Trên Google Và Tự Động Tải Về Máy](#tự-động-download-ảnh-tìm-kiếm-trên-google-về-máy)
 6. [Cào Dử Liệu Sản Phẩm Trên 1 Trang Bán Hàng](#cào-dữ-liệu-sản-phẩm-trên-1-trang-bán-hàng)
 7. [Lưu Vào Postgresql Dùng Pg-Promise](#lưu-sản-phẩm-vào-csdl-postgresql)
-8. Lưu Vào MongoDB
-9. [Tải Nhạc Tự Động Trên Chiasenhac](#)
+8. [Lưu Vào MongoDB Dùng Mongoose](#lưu-sản-phẩm-vào-csdl-mongodb)
+9. [Tải Nhạc Tự Động Trên Chiasenhac](#tải-nhạc-tự-động-trên-chiasenhac)
 9. [UI Testing - Kiểm Thử Giao Diện Trang Web](#ui-testing-với-nightmarejs)
 
 ## VÍ DỤ LẤY TIÊU ĐỀ CÁC BÀI BÁO TRÊN TRANG CHỦ VNEXPRESS
@@ -139,6 +143,7 @@ $ node fb3.js
 
 ## VÍ DỤ LẤY COOKIES TRÊN YOUTUBE
 #### CHẠY:
+
 ```bash
 $ cd 4_Youtube-Cookies/
 $ node youtube.js
@@ -149,10 +154,12 @@ $ node youtube.js
 
 ## TỰ ĐỘNG DOWNLOAD ẢNH TÌM KIẾM TRÊN GOOGLE VỀ MÁY 
 #### CHẠY:
+
 ```bash
 $ cd 5_Google-Images/
 $ node google-img-full.js
 ```
+
 #### CÁC BƯỚC :
   1. Truy xuất vào google
   2. Đánh tìm kiếm: 'Ảnh top 10 bãi biển đẹp nhất Việt Nam'
@@ -211,6 +218,7 @@ $ npm install --save shelljs
 
 ## CÀO DỮ LIỆU SẢN PHẨM TRÊN 1 TRANG BÁN HÀNG 
 #### CHẠY:
+
 ```bash
 $ cd 6_Save-To-Json/
 $ node crawl-to-json.js
@@ -222,6 +230,7 @@ $ node crawl-to-json.js
 4. Lưu mảng thông tin sản phẩm vào file json
 
 * Sử dụng thêm module `async` để quản lý và giới hạn chỉ chạy 2 tiến trình nightmare (mở 2 cửa sổ electron) 1 lúc
+
 ```bash
 // cần cài async
 $ npm install --save async
@@ -229,6 +238,7 @@ $ npm install --save async
 
 ## LƯU SẢN PHẨM VÀO CSDL POSTGRESQL
 #### CHẠY:
+
 ```bash
 $ cd 7_Save-To-Postgresql/
 $ node crawl-to-postgres.js
@@ -238,6 +248,7 @@ $ node crawl-to-postgres.js
 2. Nhưng thay vì save vào file json, sẽ kết nối và lưu trực tiếp vào CSDL Postgresql qua `pg-promise`
 
 #### CÀI VÀ KẾT NỐI POSTGRES
+
 ```bash
 npm install --save pg-promise
 ```
@@ -256,10 +267,20 @@ const pgp = require('pg-promise')();
 
 module.exports.db = pgp(cn);
 ```
-  * Trong database 'test_product' cần có 1 table để chứa các thông tin đc cào về
+  * Trong database 'test_product' cần có 1 table tên là 'product' để chứa các thông tin sản phẩm đc cào về
   * Mở postgresql với pgAdmin hoặc psql hay pgcli để chạy SQL tạo bảng 
+  * Những câu lệnh dưới đây là nếu bạn muốn dùng terminal để tương tác với Postgres (psql hay pgcli)
+  ```bash
+  // nếu sử dụng pgcli thì cần mở terminal và kết nối với postgres trong máy mình chạy ở cổng 5432
+  pgcli -h localhost -p 5432 -U postgres -W  // kết nối vào tài khoản mặc định postgres
+  // hoặc nếu đã có CSDL thì kết nối thẳng với CSDL đó
+  pgcli -h localhost -p 5432 -U postgres -W -d test_product
+  ```
   ```sql
-
+  // tạo database
+  CREATE DATABASE test_product;
+  // khi đã bên trong database 'test_product' thì tạo bảng 'product' 
+  CREATE TABLE product (id SERIAL PRIMARY KEY, product_name TEXT, manufacturer TEXT, price INTEGER, main_property JSON)
   ```
 * Trong file crawl chính `crawl-to-postgres.js`:
 ```js
@@ -267,7 +288,9 @@ module.exports.db = pgp(cn);
 const {db,config} = require('./pgp.js');
 const pgp = require('pg-promise');
 ```
+
 * Thay hàm `exportJson()` ở phần trên, sử dụng trực tiếp lệnh insert vào CSDL
+
 ```js
 // -----------Export to database directly---------
 db
@@ -280,13 +303,92 @@ db
     console.log(error.message);
   });
 ```
+
 ## LƯU SẢN PHẨM VÀO CSDL MONGODB
-* To be updated..... 
+#### CHẠY:
+```bash
+$ cd 7_Save-To-MongoDB/
+$ node crawl-to-mongo.js
+```
+#### CÁC BƯỚC:
+1. Phần cào dữ liệu sản phầm tương tự phần ở trên
+2. Nhưng thay vì save vào file json, sẽ kết nối và lưu trực tiếp vào CSDL MongoDB qua `mongoose`
+* Lưu ý các bạn cần cài đặt mongoDB trên máy. Tham khảo trang chủ của mongoDB để [cài đặt mongo](https://docs.mongodb.com/getting-started/shell/installation/)
 
+#### CÀI VÀ KẾT NỐI MONGODB
 
+```bash
+npm install --save mongoose
+```
+
+* Tạo 1 file `mongoose.js` để khởi tạo kết nối với CSDL Postgres trong máy
+
+```js
+const mongoose = require('mongoose');
+// Kết nối với mongodb, database là 'test_product'
+// Nếu connect tới 1 database chưa tồn tại, Mongo sẽ tự động tạo ra db đấy
+mongoose.connect('mongodb://localhost/test_product')
+// lắng nghe sự kiện (connection event) xem khi nào kết nối đc vs mongo
+// 'once' - chỉ lắng nghe sự kiện 'open' này 1 lần duy nhất
+mongoose.connection.once('open', function () {
+  console.log('Connection success !!!');
+}).on('error', function (error) {
+  console.log('Connection error: ', error);
+});
+
+// Tạo 1 Schema - mỗi 1 schema sẽ tương ứng với 1 MongoDB collection
+// Schema này giúp định nghĩa trước cấu trúc của các đối tượng (documents) trong 1 collection
+const productSchema = new mongoose.Schema({
+  product_name: String,
+  manufacturer: String,
+  price: Number,
+  main_property: Object,
+})
+// Tạo 1 model sản phẩm để chúng ta sử dụng
+const Product = mongoose.model('Product', productSchema);
+
+module.exports = Product;
+```
+
+* Trong file crawl chính `crawl-to-mongo.js`: phần cào dữ liệu hoàn toàn giống ở các ví dụ crawl-to-postgres hay crawl-to-json. Chúng ta chỉ cần thay đổi phần lưu dữ liệu
+* Gọi mongo model mà chúng ta định nghĩa ở bên `mongoose.js`
+
+```js
+// kết nối với CSDL MongoDB
+const mongoose = require('mongoose');
+const Product = require('./mongoose.js');
+```
+
+* Thay phần export vào Postgrest ở ví dụ trước bằng Mongo, 
+
+```js
+          // -----------Export to database directly---------
+          let newProduct = new Product(res)
+            .save()
+            .then(function (newProduct) {
+              console.log(newProduct);
+              console.log('Insert to Mongo success');
+              cb(null, res);
+            })
+            .catch(error => {
+              console.log(error.message);
+            })
+```
+
+* **Lưu ý:** Với Mongoose, sau khi hoàn thành việc lưu sản phẩm vào collection `products` trong database `test_product`, kết nối với CSDL k tự động ngưng nên chương trình của chúng ta vẫn chạy chứ không tự động tắt
+  * Cần phải chạy câu lệnh ngắt kết nối `mongoose.connection.close` sau khi hoàn thành lưu tất cả dữ liệu cào đc
+
+  ```js
+      console.log('Hoàn thành chạy crawl()');
+      // Ngắt kết nối của mongoose với CSDL
+      mongoose.connection.close(function () { 
+        console.log('Mongoose connection ends !!');  
+      }); 
+  ```
 
 ## TẢI NHẠC TỰ ĐỘNG TRÊN CHIASENHAC
 #### CHẠY:
+
 ```bash
 $ cd 9_download-Music/
 $ node download-music.js
@@ -297,6 +399,7 @@ $ node download-music.js
 * Chạy 1 tiến trình để lấy hết các link vào từng bài hát
 * Sử dụng hàm `crawl()` chạy qua từng link bài hát, mỗi lần lại gọi hàm `crawlEachUrl()` tạo 1 tiến trình nightmare con để lấy đường dẫn tải nhạc và tải về máy
 * Để tải nhạc ta sẽ sử dụng module `request` để đọc nội dung trả về (response) khi gửi get request lên url tải nhạc và ghi nó thành file nhạc trong máy
+
 ```js
 // sử dụng module request để tải file nhạc 
 request
